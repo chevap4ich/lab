@@ -7,12 +7,11 @@ MoveSprite::MoveSprite(QWidget* parent) : QLabel(parent)
     move(_startX, _startY);
     _speed = QRandomGenerator::global()->bounded(2) ? QRandomGenerator::global()->bounded(120, 201)
         : QRandomGenerator::global()->bounded(-200, -119);
-    _amplitude = 20.0 + QRandomGenerator::global()->generateDouble() * 25.0;
+    _amplitude = 40.0 + QRandomGenerator::global()->generateDouble() * 25.0;
     _frequency = 1.0;
 }
 
 void MoveSprite::updatePosition(float deltaTime) {
-    //TODO перевести правильно на double
     _startX += _speed * double(deltaTime);
     _phase += _frequency * double(deltaTime);
     double currentY = _startY + (_amplitude * std::sin(_phase));

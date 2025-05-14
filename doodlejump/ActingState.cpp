@@ -54,7 +54,7 @@ ActingState::ActingState(QWidget* parent) : QWidget(parent) {
     _pauseButton = new QPushButton(this);
     //настсроить кнопку и добавить картинки для паузы
     //тестовый кейс с поджатием ног
-    QPixmap pixmapPauseButton("D:\\Qt_practice\\doodlejump_sprites\\sprites\\pause.png");
+    QPixmap pixmapPauseButton("D:\\Qt_practice\\doodlejump_sprites\\sprites\\play_sign.png");
     pixmapPauseButton = pixmapPauseButton.scaled(width() * 0.08, width() * 0.08, Qt::IgnoreAspectRatio);
     _pauseButton->setGeometry(width() * 0.92, width() * 0.012, width() * 0.08, width() * 0.08);
     _pauseButton->setIcon(QIcon(pixmapPauseButton));
@@ -76,11 +76,10 @@ void ActingState::update(float deltaTime) {
         gameOver(deltaTime);
     }
     if(_moveDist > 50){
-        //qDebug() << "_MOVEDIST UPDATE" << _moveDist;
         loweringTheScreen(_moveDist, deltaTime);
     }
     if(_gameOverDecorationFlag){
-        //_gameOverDecorations->animateShow();
+
     }
     else{
         _mainHero->update(deltaTime);
@@ -123,19 +122,19 @@ void ActingState::generatePlatfs() {
     int platformCount;
     float movingPlatformProb;
 
-    if (_currentScore < 2000) { //уровень 1
+    if (_currentScore < 2500) { 
         platformCount = Random::intRand(2, 5);
         movingPlatformProb = 0.1f;
-    } else if (_currentScore < 5000) { //уровень 2
+    } else if (_currentScore < 5000) { 
         platformCount = Random::intRand(2, 4);
         movingPlatformProb = 0.2f;
-    } else if (_currentScore < 10000) { //уровень 3
+    } else if (_currentScore < 8000) { 
         platformCount = Random::intRand(2, 3);
         movingPlatformProb = 0.3f;
-    } else if (_currentScore < 20000) { //уровень 4
+    } else if (_currentScore < 15000) { 
         platformCount = Random::intRand(1, 2);
         movingPlatformProb = 0.5f;
-    } else { //уровень 5
+    } else { 
         platformCount = 1;
         movingPlatformProb = 0.8f;
     }
@@ -149,9 +148,9 @@ void ActingState::generatePlatfs() {
 }
 
 void ActingState::optimalPlatfGenerator(float movingProb) {
-    const int maxHorzJump = 220; // Максимальный горизонтальный прыжок
-    const int maxVertJump = _jumpDist; // Максимальный вертикальный прыжок
-    const int minGap = 10; // Минимальный отступ
+    const int maxHorzJump = 220; 
+    const int maxVertJump = _jumpDist; 
+    const int minGap = 10; 
 
     QRect base = getHighestPlatfCoords();
     int baseX = base.x();
@@ -169,23 +168,19 @@ void ActingState::optimalPlatfGenerator(float movingProb) {
         newX = baseX + maxHorzJump * cos(angle);
         newY = baseY - maxVertJump * sin(angle);
         
-        // Ограничение границ
         newX = std::clamp(newX, 0, width() - 90);
     }
 
-    //qDebug() << "NEWX" << newX << "NEWY" << newY;
 
     platfGenerator(1, QRect(newX, newY, 91, 28), type);
 }
 
-//переделать кусок экстрапомощи
 
 QRect ActingState::getHighestPlatfCoords() {
     int baseY = height();
     int baseX = 0;
     bool needsExtraHelp = false;
 
-    // Первый проход поиска
     for (auto& platform : _platforms) {
         if (platform && platform->getRect().y() < baseY && platform->getType() != PlatfType::Breaking) {
             baseY = platform->getRect().y();
@@ -193,12 +188,10 @@ QRect ActingState::getHighestPlatfCoords() {
         }
     }
 
-    // Если нет платформ, добавляем экстренную
     if (baseY > 0) {
         qDebug() << "CALLED EXTRAHELP";
         platfGenerator(1, QRect(0, -29, width(), 28), PlatfType::Default);
         
-        // Повторный поиск после генерации
         baseY = height();
         for (auto& platform : _platforms) {
             if (platform && platform->getRect().y() < baseY && platform->getType() != PlatfType::Breaking) {
@@ -215,7 +208,7 @@ void ActingState::platfGenerator(int count, const QRect& area, std::optional<Pla
     const int platfWidth = 90;
     const int platfHeight = 27;
     const int minDistance = 2;
-    const int maxAttempts = 50; // Максимальное количество попыток для MovingPlatform
+    const int maxAttempts = 50; 
 
     std::vector<std::shared_ptr<Platform>> newPlatforms;
     newPlatforms.reserve(count);
@@ -234,7 +227,6 @@ void ActingState::platfGenerator(int count, const QRect& area, std::optional<Pla
         int attempts = 0;
         
         do {
-            // Если не удалось разместить MovingPlatform за maxAttempts попыток - переключаемся на Default
             if (attempts > maxAttempts) {
                 positionIsFree = false;
                 break;
@@ -244,11 +236,10 @@ void ActingState::platfGenerator(int count, const QRect& area, std::optional<Pla
             y = Random::intRand(0, area.height() - platfHeight) + area.y();
             positionIsFree = true;
 
-            // Замените блок с tempPlatform на:
             QRect checkRect;
             switch(type) {
                 case PlatfType::Moving:
-                    checkRect = QRect(0, y, width(), 27); // Высота MovingPlatform
+                    checkRect = QRect(0, y, width(), 27); 
                     break;
                 case PlatfType::Breaking:
                     checkRect = QRect(x, y, 90, 27);
@@ -257,7 +248,6 @@ void ActingState::platfGenerator(int count, const QRect& area, std::optional<Pla
                     checkRect = QRect(x, y, 90, 27);
             }
 
-            // Проверка пересечений
             if (intersectsAny(checkRect, newPlatforms) || intersectsAny(checkRect, _platforms)) {
                 positionIsFree = false;
                 attempts++;
@@ -352,7 +342,7 @@ void ActingState::addScore(int points) {
 
 
 ActingState::~ActingState() {
-    //qDebug() << "ActingState destroyed";
+    
     if (_scoreTimer) {
         _scoreTimer->stop();
         delete _scoreTimer;
@@ -363,7 +353,6 @@ ActingState::~ActingState() {
 
 void ActingState::gameOverProcessed(){
     _gameOverAnimationFlag = true;
-    //сделать нормально
     QGraphicsOpacityEffect* opacityEffect = new QGraphicsOpacityEffect(this);
     opacityEffect->setOpacity(0.7);
     _pauseButton->setGraphicsEffect(opacityEffect);
@@ -382,7 +371,6 @@ void ActingState::gameOver(float deltaTime){
 
         connect(_gameOverDecorations, &GameOverDecorations::playAgainRequested,  this, [this]() { emit restartRequested(); });
         connect(_gameOverDecorations, &GameOverDecorations::menuRequested, this, [this]() { emit returnToMenuRequested(); });
-        //connect(_gameOverDecorations, &GameOverDecorations::saveRequested, [this](const QString& name) { emit saveResultRequested(name, _currentScore); });
         
         _gameOverDecorations->animateShow();
         _gameOverDecorations->setScore(_currentScore);
@@ -403,14 +391,14 @@ void ActingState::togglePause() {
     _isPaused = !_isPaused;
     
     if (_isPaused) {
-        _pauseButton->setIcon(QIcon("D:\\Qt_practice\\doodlejump_sprites\\sprites\\play@2x.png"));
+        _pauseButton->setIcon(QIcon("D:\\Qt_practice\\doodlejump_sprites\\sprites\\play@2xasd.png")); 
 
         _pauseLabel->raise();
         _pauseButton->raise();
         _pauseLabel->show();
     } 
     else {
-        _pauseButton->setIcon(QIcon("D:\\Qt_practice\\doodlejump_sprites\\sprites\\pause.png"));
+        _pauseButton->setIcon(QIcon("D:\\Qt_practice\\doodlejump_sprites\\sprites\\play_sign.png"));
         _pauseLabel->hide();
     }
 }

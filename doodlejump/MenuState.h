@@ -18,11 +18,11 @@ public:
     void update(float);
 signals:
     void playRequested();
-    //void highScoresRequested();
-    //void optionsRequested();
     void exitRequested();
     void moveLeft();
     void moveRight();
+    void highScoresRequested();
+    void optionsRequested();
 private:
     void createSprites();
     ButtonForMenu* _playButton;

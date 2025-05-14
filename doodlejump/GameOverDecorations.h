@@ -21,7 +21,6 @@ public:
     void setScore(int score);
 
 signals:
-    //void saveRequested(const QString& name);
     void playAgainRequested();
     void menuRequested();
 

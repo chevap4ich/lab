@@ -23,6 +23,6 @@ set(Qt6Gui_DIR "D:\\Qt\\6.8.2\\msvc2022_64\\lib\\cmake\\Qt6Gui")
 find_package(Qt6Gui REQUIRED)
 
 add_executable(doodlejump main.cpp MainWindow.cpp MainHero.cpp MenuState.cpp ActingState.cpp Platform.cpp DefaultPlatform.cpp MovingPlatform.cpp BreakingPlatform.cpp
-    ButtonForMenu.cpp GameOverDecorations.cpp MoveSprite.cpp)
+    ButtonForMenu.cpp GameOverDecorations.cpp MoveSprite.cpp OptionsState.cpp)
 
 target_link_libraries(doodlejump PRIVATE Qt6Widgets Qt6Core Qt6Gui)

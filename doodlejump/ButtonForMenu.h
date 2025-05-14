@@ -4,8 +4,6 @@
 #include <QPushButton>
 #include <functional>
 
-//переименовать в обычный буттон
-
 class ButtonForMenu : public QPushButton
 {
     Q_OBJECT
@@ -15,6 +13,7 @@ signals:
     void buttonPressed();
 private slots:
     void handleButtonClick();
+    
 private:    
     std::function<void()> _clickAction;
 };

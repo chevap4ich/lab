@@ -63,7 +63,6 @@ private:
     bool _movingLeft = false;
     bool _movingRight = false;
     CurrentDirection _currentMoving;    
-    //HeroType _type;
     float _velocityX = 0.0f;
     float _accelerationX = 75.0f;
     float _maxVelocityX = 75.0f;

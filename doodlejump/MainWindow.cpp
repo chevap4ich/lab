@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "MoveSprite.h"
 #include "config.h"
+//#include "HighScoresWindow.h"
 
 MainWindow::MainWindow(QApplication* app): QMainWindow(), _app(app){
 
@@ -21,11 +22,9 @@ MainWindow::MainWindow(QApplication* app): QMainWindow(), _app(app){
 
 void MainWindow::run(){
     uint64_t time = QDateTime::currentMSecsSinceEpoch();
-    //qDebug() << "MainWindow::run() started";
     while(_isRunning){
-        //qDebug() << "MainWindow::run() loop iteration";
         _app->processEvents();
-        //qDebug() << "Events processed";
+       
         uint64_t newTime = QDateTime::currentMSecsSinceEpoch();
         float deltaTime = float(newTime - time)/SIMULATION_SPEED;
 
@@ -36,9 +35,9 @@ void MainWindow::run(){
         case GameState::Acting:
             _actingState->update(deltaTime);
             break;  
-        /*case GameState::Options:
-            _optionsState->update(deltaTime);
-            break; */   
+        case GameState::Options:
+            
+            break;    
         }
         
         this->repaint();
@@ -50,11 +49,10 @@ void MainWindow::playButtonPressed() {
     setupActingState();
 }
 
-//разобраться с состояниями и удалениями
+
 void MainWindow::setupActingState() {
     _actingState = new ActingState(this);
     connect(_actingState, &ActingState::restartRequested, this, &MainWindow::setupActingState);
-    //connect(_actingState, &ActingState::saveResultRequested, this, &MainWindow::saveResult);
     connect(_actingState, &ActingState::returnToMenuRequested, this, &MainWindow::returnToMenu);
     this->setCentralWidget(_actingState);
     _currentState = GameState::Acting;
@@ -63,46 +61,37 @@ void MainWindow::setupActingState() {
 void MainWindow::setupMenuState(){
     _menuState = new MenuState(this);
     connect(_menuState, &MenuState::playRequested, this, &MainWindow::playButtonPressed);
-    //connect(_menuState, &MenuState::highScoresRequested, this, &MainWindow::highScoresButtonPressed);
-    //connect(_menuState, &MenuState::optionsRequested, this, &MainWindow::optionsButtonPressed);
+    connect(_menuState, &MenuState::highScoresRequested, this, &MainWindow::highScoresButtonPressed);
+    connect(_menuState, &MenuState::optionsRequested, this, &MainWindow::optionsButtonPressed);
     connect(_menuState, &MenuState::exitRequested, this, &MainWindow::exitButtonPressed);
     this->setCentralWidget(_menuState);
     _currentState = GameState::Menu;
 }
 
-/*void MainWindow::setupOptionsState() {
+void MainWindow::setupOptionsState() {
     _optionsState = new OptionsState(this);
-    connect(_optionsState, &OptionsState::playRequested, this, &MainWindow::playButtonPressed);
-    connect(_optionsState, &OptionsState::highScoresRequested, this, &MainWindow::highScoresButtonPressed);
     connect(_optionsState, &OptionsState::returnToMenuRequested, this, &MainWindow::returnToMenu);
     this->setCentralWidget(_optionsState);
     _currentState = GameState::Options;
-}*/
+}
+
 
 void MainWindow::returnToMenu() {
     setupMenuState();
 }
 
-/*void MainWindow::saveResult(const QString& name, int score) {
-    _scoreManager.addScore(name, score);
-}*/
-
-/*void MainWindow::clearHighScores() {
-
-}*/
-
-/*void MainWindow::highScoresButtonPressed() {
-    ScoresState scoresDialog(this);
-    scoresDialog.updateTable(_scoreManager.getScores());
-    scoresDialog.exec();
-}*/
-
-/*void MainWindow::optionsButtonPressed() {
-    setupOptionsState();
-}*/
 
 void MainWindow::exitButtonPressed() {
     close();
+}
+
+void MainWindow::highScoresButtonPressed() {
+    /*HighScoresWindow highScoresDialog(this);
+    highScoresDialog.exec();*/
+}
+
+void MainWindow::optionsButtonPressed() { 
+    setupOptionsState();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

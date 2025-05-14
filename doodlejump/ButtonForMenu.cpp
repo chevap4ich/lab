@@ -8,9 +8,12 @@ ButtonForMenu::ButtonForMenu(const QString& imagePath, const QString& imageBGPat
 {
     QPixmap buttonImage(imagePath); 
     QPixmap buttonImageBG(imageBGPath);
+    if (buttonImage.isNull() || buttonImageBG.isNull()) {
+        qDebug() << "Error: Failed to load button image(s).";
+        return;
+    }
     setFixedSize(parent->height() * 0.075 * 2.78 , parent->height() * 0.075);
     buttonImage = buttonImage.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    //setMask(buttonImage.mask());
     setIcon(QIcon(buttonImage));
     setIconSize(this->size());
     setStyleSheet( "QPushButton { border: none; background: transparent; }" );

@@ -6,7 +6,7 @@ MainHero::MainHero(QWidget* parent) : QLabel(parent) {
     _velocity = 0;
     _acceleration = 50;
     _x = (parent->width() - width()) / 2;
-    _y = parent->height() / 2; // Центрировать по вертикали
+    _y = parent->height() / 2;
     _lineSize = 1;
     QPixmap spritePixmap("D:\\Qt_practice\\doodlejump_sprites\\sprites\\blue-lik-left@2x.png");
     spritePixmap = spritePixmap.scaled(width() * 2, height() * 2, Qt::KeepAspectRatio);
@@ -73,7 +73,7 @@ void MainHero::checkPlatformCollisions(float& newY, float& newVelocity, const fl
 
             float bottomVelocity = _velocity + _acceleration*deltaTimeDown;
             bottomVelocity = -bottomVelocity;
-            //bottomVelocity *= 0.4f;
+           
 
             newY = float(platformRect.y() - height()) + bottomVelocity*deltaTimeUp + _acceleration*deltaTimeUp*deltaTimeUp/2;
 
@@ -130,7 +130,7 @@ void MainHero::setNormalImage(){
         _odskokImage = false;
     }
 }
-//приоритет последнего направления
+
 void MainHero::movingDirectionCheck(float deltaTime) {
     if (!_movingLeft && !_movingRight) {
         if (_velocityX > 0) {
@@ -212,7 +212,7 @@ void MainHero::gameOverCheck(float deltaTime){
         _isMoving = false;
     }
 }
-//поиграть с мэджик намберами
+
 void MainHero::goOut(float deltaTime) {
     if (!_isMoving) {
         _isMoving = true;
@@ -232,7 +232,7 @@ void MainHero::goOut(float deltaTime) {
             _acceleration = 100;
         }
     }
-    //qDebug() << _y << targetY << _velocity;
+    
     _y += _velocity * deltaTime;
     _velocity += _acceleration * deltaTime;
     move(static_cast<int>(_x), static_cast<int>(_y));

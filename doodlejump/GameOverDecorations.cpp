@@ -56,14 +56,6 @@ GameOverDecorations::GameOverDecorations(QWidget* parent) : QWidget(parent) {
     bottomLabel->setFixedSize(pixmapBottomLabel.size());
     bottomLabel->setAlignment(Qt::AlignBottom | Qt::AlignCenter);
 
-    /*_saveButton = new ButtonForMenu("D:\\Qt practice\\doodlejump_sprites\\sprites\\set@2x.png",
-        "D:\\Qt practice\\doodlejump_sprites\\sprites\\set-on@2x.png",
-         [this](){ emit saveRequested(_nameEdit->text()); }, this);*/
-
-    /*QHBoxLayout* saveButtonLayout = new QHBoxLayout();
-    saveButtonLayout->addWidget(_saveButton);
-    saveButtonLayout->setContentsMargins(width() * 0.1, 0, 0, 0);*/
-
     _playAgainButton = new ButtonForMenu("D:\\Qt_practice\\doodlejump_sprites\\sprites\\play-again-on@2x.png",
         "D:\\Qt_practice\\doodlejump_sprites\\sprites\\play-again-on@2x.png",
          [this](){ emit playAgainRequested(); }, this);

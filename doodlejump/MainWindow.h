@@ -12,9 +12,7 @@
 #include"config.h"
 #include"MenuState.h"
 #include"ActingState.h"
-//#include"ScoresState.h"
-//#include"OptionsState.h"
-//#include"JsonScoreManager.h"
+#include"OptionsState.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -23,15 +21,13 @@ public:
     void run();
 private slots:
     void playButtonPressed();
-    //void highScoresButtonPressed();
-    //void optionsButtonPressed();
     void exitButtonPressed();
     void returnToMenu();
-    //void saveResult(const QString& name, int score);
     void setupActingState();
     void setupMenuState();
-    //void setupOptionsState();
-    //void clearHighScores();
+    void setupOptionsState();
+    void optionsButtonPressed();
+    void highScoresButtonPressed();
 protected:
     void closeEvent(QCloseEvent*) override;
 private:
@@ -39,8 +35,7 @@ private:
     QApplication* _app;
     MenuState* _menuState;
     ActingState* _actingState;
-    //OptionsState* _optionsState;
-    //JsonScoreManager _scoreManager;
+    OptionsState* _optionsState;
     GameState _currentState;
     bool _isRunning = true;
 };
